@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'data/providers/auth_state.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key? key}) : super(key: key);
@@ -13,6 +16,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _signUp = false;
   bool showPassword = false;
+  String _emailCheck = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +36,16 @@ class _SignUpPageState extends State<SignUpPage> {
                     decoration: const InputDecoration(labelText: "Email"),
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please enter your email";
+                      } else if (!RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^`{|}~]+@[a-zA-Z0-9]+.[a-zA-Z]+")
+                          .hasMatch(_emailController.text)) {
+                        return "Please enter valid email";
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 const SizedBox(
@@ -54,11 +68,33 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: _passwordController,
                     obscureText: !showPassword,
                     keyboardType: TextInputType.visiblePassword,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please enter your password";
+                      } else if (value.length < 8) {
+                        return "Password need to be 8 characters long";
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 Center(
                   child: ElevatedButton(
-                    onPressed: _signUp ? () {} : () {},
+                    onPressed: _signUp
+                        ? () {
+                            Provider.of<AuthState>(context, listen: false)
+                                .signOnWithEmail(
+                              email: _emailController.text.trim(),
+                              password: _passwordController.text.trim(),
+                            );
+                          }
+                        : () {
+                            Provider.of<AuthState>(context, listen: false)
+                                .signInWithEmail(
+                              email: _emailController.text.trim(),
+                              password: _passwordController.text.trim(),
+                            );
+                          },
                     child: Text(_signUp ? "Sign Up" : "Log In"),
                   ),
                 ),
