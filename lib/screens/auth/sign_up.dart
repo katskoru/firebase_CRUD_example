@@ -12,6 +12,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _signUp = false;
+  bool showPassword = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +31,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: TextFormField(
                     decoration: const InputDecoration(labelText: "Email"),
                     controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
                   ),
                 ),
                 const SizedBox(
@@ -38,9 +40,20 @@ class _SignUpPageState extends State<SignUpPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    decoration: const InputDecoration(labelText: "Password"),
+                    decoration: InputDecoration(
+                        labelText: "Password",
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                showPassword = !showPassword;
+                              });
+                            },
+                            icon: Icon(showPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility))),
                     controller: _passwordController,
-                    obscureText: true,
+                    obscureText: !showPassword,
+                    keyboardType: TextInputType.visiblePassword,
                   ),
                 ),
                 Center(
