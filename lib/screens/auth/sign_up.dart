@@ -11,6 +11,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _signUp = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,10 +45,20 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text("Sign Up"),
+                    onPressed: _signUp ? () {} : () {},
+                    child: Text(_signUp ? "Sign Up" : "Log In"),
                   ),
-                )
+                ),
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _signUp = !_signUp;
+                      });
+                    },
+                    child: Text(!_signUp ? "Sign Up" : "Log In"),
+                  ),
+                ),
               ],
             ),
           ),
