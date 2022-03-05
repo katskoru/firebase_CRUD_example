@@ -21,10 +21,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => AuthState(FirebaseAuth.instance),
+          create: (context) => AuthState(FirebaseAuth.instance),
         ),
         StreamProvider(
-            create: (_) => context.read<AuthState>().userChanges,
+            create: (context) => context.read<AuthState>().userChanges,
             initialData: null)
       ],
       child: MaterialApp(
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: SignUpPage(),
+        home: LoginHandler(),
       ),
     );
   }

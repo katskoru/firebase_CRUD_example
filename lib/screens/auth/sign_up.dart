@@ -82,18 +82,22 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: ElevatedButton(
                     onPressed: _signUp
                         ? () {
-                            Provider.of<AuthState>(context, listen: false)
-                                .signOnWithEmail(
-                              email: _emailController.text.trim(),
-                              password: _passwordController.text.trim(),
-                            );
+                            if (_formKey.currentState!.validate()) {
+                              Provider.of<AuthState>(context, listen: false)
+                                  .signOnWithEmail(
+                                email: _emailController.text.trim(),
+                                password: _passwordController.text.trim(),
+                              );
+                            }
                           }
                         : () {
-                            Provider.of<AuthState>(context, listen: false)
-                                .signInWithEmail(
-                              email: _emailController.text.trim(),
-                              password: _passwordController.text.trim(),
-                            );
+                            if (_formKey.currentState!.validate()) {
+                              Provider.of<AuthState>(context, listen: false)
+                                  .signInWithEmail(
+                                email: _emailController.text.trim(),
+                                password: _passwordController.text.trim(),
+                              );
+                            }
                           },
                     child: Text(_signUp ? "Sign Up" : "Log In"),
                   ),
