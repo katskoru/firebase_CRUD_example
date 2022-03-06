@@ -13,14 +13,27 @@ class Home extends StatelessWidget {
             onPressed: () {
               Provider.of<AuthState>(context, listen: false).signOut();
             },
-            icon: Icon(Icons.logout))
+            icon: const Icon(Icons.logout))
       ]),
       body: Center(
-          child: TextButton(
-              onPressed: () {
-                Provider.of<AuthState>(context, listen: false).signOut();
-              },
-              child: const Text("Log Out"))),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return listItem("Brand", index.toString());
+              }),
+        ),
+      ),
+    );
+  }
+
+  Widget listItem(brand, model) {
+    return ListTile(
+      title: Text(brand),
+      subtitle: Text(model),
+      trailing: IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
     );
   }
 }
