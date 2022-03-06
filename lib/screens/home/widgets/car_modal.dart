@@ -78,10 +78,18 @@ class _CarModalState extends State<CarModal> {
                 TextButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        FirebaseFirestore.instance
-                            .collection("cars")
-                            .doc(widget.docID)
-                            .update(_car!.toJson());
+                        if (widget.docID == "") {
+                          FirebaseFirestore.instance
+                              .collection("cars")
+                              .add(_car!.toJson())
+                              .whenComplete(() => Navigator.of(context).pop());
+                        } else {
+                          FirebaseFirestore.instance
+                              .collection("cars")
+                              .doc(widget.docID)
+                              .update(_car!.toJson())
+                              .whenComplete(() => Navigator.of(context).pop());
+                        }
                       }
                     },
                     child: const Text("Save"))

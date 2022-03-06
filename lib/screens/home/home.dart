@@ -56,8 +56,17 @@ class Home extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Cars data = Cars(model: "c5", brand: "Citroen");
-          FirebaseFirestore.instance.collection("cars").add(data.toJson());
+          Cars data = Cars(model: "", brand: "");
+
+          showDialog(
+            context: context,
+            builder: (_) => Dialog(
+              child: CarModal(
+                car: data,
+                docID: "",
+              ),
+            ),
+          );
         },
         child: const Icon(Icons.add),
       ),
