@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  Home({Key? key}) : super(key: key);
 
+  List<String> documentsID = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,8 +21,8 @@ class Home extends StatelessWidget {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: FutureBuilder(
-              future: FirebaseFirestore.instance.collection("cars").get(),
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance.collection("cars").snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(
@@ -32,6 +33,7 @@ class Home extends StatelessWidget {
                       snapshot.data!.docs.map((DocumentSnapshot document) {
                     Map<String, dynamic> data =
                         document.data()! as Map<String, dynamic>;
+                    documentsID.add(document.id);
                     return Cars.fromJson(data);
                   }).toList();
 
@@ -40,21 +42,34 @@ class Home extends StatelessWidget {
                       itemCount: _listOfCars.length,
                       itemBuilder: (context, index) {
                         Cars _car = _listOfCars[index];
-                        return listItem(_car.brand, _car.model);
+                        return listItem(
+                            _car.brand, _car.model, documentsID[index]);
                       });
                 }
               }),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Cars data = Cars(model: "c5", brand: "Citroen");
+          FirebaseFirestore.instance.collection("cars").add(data.toJson());
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 
-  Widget listItem(brand, model) {
+  Widget listItem(brand, model, documentID) {
     return Dismissible(
       key: UniqueKey(),
       onDismissed: (direction) {
         if (direction == DismissDirection.startToEnd ||
-            direction == DismissDirection.endToStart) print("delete");
+            direction == DismissDirection.endToStart) {
+          FirebaseFirestore.instance
+              .collection("cars")
+              .doc(documentID)
+              .delete();
+        }
       },
       child: ListTile(
         title: Text(brand),
