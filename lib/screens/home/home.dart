@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_example/screens/auth/data/providers/auth_state.dart';
 import 'package:firebase_example/screens/home/data/models/cars_model.dart';
+import 'package:firebase_example/screens/home/widgets/car_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,8 +48,7 @@ class Home extends StatelessWidget {
                       itemCount: _listOfCars.length,
                       itemBuilder: (context, index) {
                         Cars _car = _listOfCars[index];
-                        return listItem(_car.brand, _car.model,
-                            documentsID[index], context);
+                        return listItem(_car, documentsID[index], context);
                       });
                 }
               }),
@@ -64,7 +64,7 @@ class Home extends StatelessWidget {
     );
   }
 
-  Widget listItem(brand, model, documentID, context) {
+  Widget listItem(Cars car, documentID, context) {
     return Dismissible(
       key: UniqueKey(),
       onDismissed: (direction) {
@@ -77,23 +77,17 @@ class Home extends StatelessWidget {
         }
       },
       child: ListTile(
-        title: Text(brand),
-        subtitle: Text(model),
+        title: Text(car.brand!),
+        subtitle: Text(car.model!),
         trailing: IconButton(
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (_) => AlertDialog(
-                  title: Text(brand),
-                  content: Text(model),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text("Cancel")),
-                    TextButton(onPressed: () {}, child: Text("Save"))
-                  ],
+                builder: (_) => Dialog(
+                  child: CarModal(
+                    car: car,
+                    docID: documentID,
+                  ),
                 ),
               );
             },
