@@ -33,8 +33,13 @@ class Home extends StatelessWidget {
                       snapshot.data!.docs.map((DocumentSnapshot document) {
                     Map<String, dynamic> data =
                         document.data()! as Map<String, dynamic>;
-                    documentsID.add(document.id);
+
                     return Cars.fromJson(data);
+                  }).toList();
+
+                  documentsID =
+                      snapshot.data!.docs.map((DocumentSnapshot document) {
+                    return document.id;
                   }).toList();
 
                   return ListView.builder(
@@ -42,8 +47,8 @@ class Home extends StatelessWidget {
                       itemCount: _listOfCars.length,
                       itemBuilder: (context, index) {
                         Cars _car = _listOfCars[index];
-                        return listItem(
-                            _car.brand, _car.model, documentsID[index]);
+                        return listItem(_car.brand, _car.model,
+                            documentsID[index], context);
                       });
                 }
               }),
@@ -54,12 +59,12 @@ class Home extends StatelessWidget {
           Cars data = Cars(model: "c5", brand: "Citroen");
           FirebaseFirestore.instance.collection("cars").add(data.toJson());
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
-  Widget listItem(brand, model, documentID) {
+  Widget listItem(brand, model, documentID, context) {
     return Dismissible(
       key: UniqueKey(),
       onDismissed: (direction) {
@@ -74,7 +79,25 @@ class Home extends StatelessWidget {
       child: ListTile(
         title: Text(brand),
         subtitle: Text(model),
-        trailing: IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+        trailing: IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Text(brand),
+                  content: Text(model),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Cancel")),
+                    TextButton(onPressed: () {}, child: Text("Save"))
+                  ],
+                ),
+              );
+            },
+            icon: const Icon(Icons.edit)),
       ),
     );
   }
