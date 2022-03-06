@@ -8,13 +8,19 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(actions: [
+        IconButton(
+            onPressed: () {
+              Provider.of<AuthState>(context, listen: false).signOut();
+            },
+            icon: Icon(Icons.logout))
+      ]),
       body: Center(
           child: TextButton(
               onPressed: () {
                 Provider.of<AuthState>(context, listen: false).signOut();
               },
-              child: Text("Log Out"))),
+              child: const Text("Log Out"))),
     );
   }
 }
