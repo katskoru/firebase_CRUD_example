@@ -36,6 +36,7 @@ class _CarModalState extends State<CarModal> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: TextFormField(
+                decoration: InputDecoration(labelText: "Brand"),
                 onChanged: (value) {
                   setState(() {
                     _car!.brand = value;
@@ -53,6 +54,7 @@ class _CarModalState extends State<CarModal> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: TextFormField(
+                decoration: InputDecoration(labelText: "Model"),
                 onChanged: (value) {
                   setState(() {
                     _car!.model = value;

@@ -4,7 +4,6 @@ import 'package:firebase_example/screens/auth/sign_up.dart';
 import 'package:firebase_example/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginHandler(),
+        home: const LoginHandler(),
       ),
     );
   }
